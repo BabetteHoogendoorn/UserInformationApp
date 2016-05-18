@@ -1,7 +1,15 @@
 doctype html
 html
 	head
+	link(href='style.css', rel='stylesheet')
 	body
-	p #{match[0].firstname}
-	p #{match[0].lastname}
-	p #{match[0].email}
+		#nav
+			a(href='/') HOME
+			a(href='/search') SEARCH
+			a(href='/submit') SUBMIT
+		if match[0]
+			p #{match[0].firstname}
+			p #{match[0].lastname}
+			p #{match[0].email}
+		if !match[0]
+			p Noh user sah!

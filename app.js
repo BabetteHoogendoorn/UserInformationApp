@@ -10,6 +10,7 @@ var bodyParser = require('body-parser')
 // renders a page that displays all your users.
 app.set('views', 'src/views');
 app.set('view engine', 'jade');
+app.use(express.static('src'));
 
 app.get('/', function(request, response) {
   fs.readFile('./users.json', function(err, data) {
@@ -50,7 +51,7 @@ app.post('/search', function( request, response){
     console.log('parseddata')
     console.log(parsedData)
 
-    var input = request.body.userinput
+    var input = request.body.input
     for (var i = 0; i < parsedData.length; i++) {
       if (input === parsedData[i].firstname){
         match.push(parsedData[i]);
@@ -58,11 +59,20 @@ app.post('/search', function( request, response){
       else if (input === parsedData[i].lastname){
         match.push(parsedData[i]);
       }
+      // else {
+      //   console.log("error");
+      // }
     }
 
+
     // match = JSON.stringify(match);
-    console.log(match[0].firstname)
-    console.log(input)
+
+    if (match.length == 0) {
+      console.log("no user found! Nooooooo!")
+    } else {
+      console.log(match[0].firstname)
+      console.log(input)
+    }
     response.render('results', {match: match})
   });
 });

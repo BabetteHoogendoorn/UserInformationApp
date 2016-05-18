@@ -1,9 +1,14 @@
 doctype html
 html
     head
+    link(href='style.css', rel='stylesheet')
     body
+      #nav
+          a(href='/') HOME
+          a(href='/search') SEARCH
+          a(href='/submit') SUBMIT
         h1= title
-        form(name="add-estimation", action="/submit-user", method="post")
+        form(name="add-estimation", action="/submit", method="post")
             div.input
                 span.label Firstname:
                 input(type="text", name="firstname")

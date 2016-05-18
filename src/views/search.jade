@@ -1,7 +1,12 @@
 doctype html
 html
 	head
+	link(href='style.css', rel='stylesheet')
 	body
+		#nav
+			a(href='/') HOME
+			a(href='/search') SEARCH
+			a(href='/submit') SUBMIT
 	form(action='./search' method='post')
-		input(name="userinput")
+		input(name="input")
 		input(type="submit")
