@@ -11,6 +11,7 @@ var bodyParser = require('body-parser')
 app.set('views', 'src/views');
 app.set('view engine', 'jade');
 app.use(express.static('src'));
+app.use(express.static('src/custom.js'))
 
 app.get('/', function(request, response) {
   fs.readFile('./users.json', function(err, data) {
@@ -38,7 +39,8 @@ app.get('/search', function(request, response){
   response.render('search')
 });
 
-app.post('/search', function( request, response){
+//AJAX autocomplete
+app.post('/searchbar', function(request, response){
   fs.readFile('./users.json', function(err, data) {
     var match = [];
 
@@ -47,55 +49,96 @@ app.post('/search', function( request, response){
     }
 
     var parsedData = JSON.parse(data);
+    var input = request.body.input;
+    var count = 0;
+    console.log(input)
 
-    console.log('parseddata')
-    console.log(parsedData)
+    for(var i=0; i<parsedData.length; i++){
+      var voornaam = parsedData[i].firstname;
+      var achternaam = parsedData[i].lastname;
+      if (voornaam.indexOf(input) >= 0 || achternaam.indexOf(input) >=0 ) {
+        match.push(voornaam + ' ' + achternaam);
 
-    var input = request.body.input
-    for (var i = 0; i < parsedData.length; i++) {
-      if (input === parsedData[i].firstname){
-        match.push(parsedData[i]);
+  }
+    else {
+        count++
+        if (count == parsedData.length) {
+          if (match.length == 0){
+            match = ["Sorry, no matches were found."];
+          }
+        }
       }
-      else if (input === parsedData[i].lastname){
-        match.push(parsedData[i]);
-      }
-      // else {
-      //   console.log("error");
-      // }
-    }
 
 
-    // match = JSON.stringify(match);
+  };
 
-    if (match.length == 0) {
-      console.log("no user found! Nooooooo!")
-    } else {
-      console.log(match[0].firstname)
-      console.log(input)
-    }
-    response.render('results', {match: match})
+    console.log(match)
+    response.send( {
+      result: match
+    })
   });
 });
 
 
+  //
+  app.post('/search', function( request, response){
+    fs.readFile('./users.json', function(err, data) {
+      var match = [];
 
-app.get('/submit', function (request, response) {
-  response.render("submit", {
+      if (err) {
+        console.log(err);
+      }
+
+      var parsedData = JSON.parse(data);
+
+      console.log('parseddata')
+      console.log(parsedData)
+
+      var input = request.body.input
+      for (var i = 0; i < parsedData.length; i++) {
+        if (input === parsedData[i].firstname){
+          match.push(parsedData[i]);
+        }
+        else if (input === parsedData[i].lastname){
+          match.push(parsedData[i]);
+        }
+        // else {
+        //   console.log("error");
+        // }
+      }
+
+
+      // match = JSON.stringify(match);
+
+      if (match.length == 0) {
+        console.log("no user found! Nooooooo!")
+      } else {
+        console.log(match[0].firstname)
+        // console.log(input)
+      }
+      response.render('results', {match: match})
+    });
   });
-});
 
 
-app.post('/submit', function (request, response) {
-  var newuser = request.body
-  var userList = fs.readFileSync('./users.json')
-  var users = JSON.parse (userList)
-  users.push (newuser)
-  var userJSON = JSON.stringify (users)
-  fs.writeFileSync ('./users.json', userJSON)
-  response.redirect ('/')
-});
+
+  app.get('/submit', function (request, response) {
+    response.render("submit", {
+    });
+  });
 
 
-var server = app.listen(3000, function() {
-  console.log('Example app listening on port: ' + server.address().port);
-});
+  app.post('/submit', function (request, response) {
+    var newuser = request.body
+    var userList = fs.readFileSync('./users.json')
+    var users = JSON.parse (userList)
+    users.push (newuser)
+    var userJSON = JSON.stringify (users)
+    fs.writeFileSync ('./users.json', userJSON)
+    response.redirect ('/')
+  });
+
+
+  var server = app.listen(7000, function() {
+    console.log('Example app listening on port: ' + server.address().port);
+  });
