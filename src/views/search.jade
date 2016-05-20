@@ -2,11 +2,28 @@ doctype html
 html
 	head
 	link(href='style.css', rel='stylesheet')
+	script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+
 	body
 		#nav
 			a(href='/') HOME
 			a(href='/search') SEARCH
 			a(href='/submit') SUBMIT
-	form(action='./search' method='post')
-		input(name="input")
+	form(id = 'searchbar' action='./search' method='post' autocomplete="off")
+		input#input(name="input")
 		input(type="submit")
+	p#List
+
+	script.
+		$( "#input" ).keyup(function() {
+			$("#List").empty();
+				var filedata = {
+					input: $("#input").val()
+						}
+				$.post( "/searchbar", filedata, function( response, textStatus ) {
+					for (var i=0; i < response.result.length; i++){
+						$( "#List" ).append("<p>" + response.result[i] + "</p>");
+
+					};
+					});
+		});
