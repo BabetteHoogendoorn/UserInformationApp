@@ -1,0 +1,10 @@
+-jade file: geef klasse aan input veld
+-jade file: ruimte waar je de resultaten kunt neerzetten (paragraaf met klassenaam die je later kan aanspreken met jquery)
+-jquery file: dom aanspreken
+-jquery file: keyup functie gebruiken.
+-jquery file: door keyup wordt variable aangemaakt waar input in komt te staan --> .val
+-post value waar je variable van gemaakt hebt (in jquery) naar server (app.js) --> $.post
+in app: value lezen en index of gebruiken. dus vergelijken met voor en achternamen in geparste json file
+--> als hoger / gelijk aan 0 : naar resultaten pushen
+ook iets pushen naar de resultaten als er geen overeenkomst is
+In jquery: alle resultaten appenden aan de ruimte die je hebt gemaakt voor de resultaten (met for loop)
