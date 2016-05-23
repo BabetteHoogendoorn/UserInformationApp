@@ -37,6 +37,7 @@ app.use( bodyParser.urlencoded({
 }));
 app.get('/search', function(request, response){
   response.render('search')
+  console.log("iets")
 });
 
 //AJAX autocomplete
