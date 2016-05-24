@@ -15,15 +15,19 @@ html
 	p#List
 
 	script.
+		var timedelay = 300;
 		$( "#input" ).keyup(function() {
-			$("#List").empty();
 				var filedata = {
-					input: $("#input").val()
+								input: $("#input").val()
 						}
+				clearTimeout(timedelay);
+				$("#List").empty();
+				timer = setTimeout(function() {
 				$.post( "/searchbar", filedata, function( response, textStatus ) {
 					for (var i=0; i < response.result.length; i++){
 						$( "#List" ).append("<p>" + response.result[i] + "</p>");
 
 					};
 					});
+		},300);
 		});
